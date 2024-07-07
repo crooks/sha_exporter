@@ -30,7 +30,7 @@ func findGroups(groupFileName string) (countSuccess, countFail int, err error) {
 		line := scanner.Text()
 		groupFields := strings.Split(line, ":")
 		// Test if config contains an entry for this group.  If it does, assign the expected hash.
-		cfgSha, ok := cfg.Groups[groupFields[0]]
+		cfgGroup, ok := cfg.Groups[groupFields[0]]
 		// If there isn't a dictionary entry in cfg.Groups for this line in the file, move on.
 		if !ok {
 			log.Tracef("Unwanted group \"%s\".  Continuing", groupFields[0])
@@ -40,7 +40,7 @@ func findGroups(groupFileName string) (countSuccess, countFail int, err error) {
 		fileSha := group.usersHash()
 		// If the SHA hash defined in the configuration matches the hash
 		// generated from the users in the group file, set conforms to true.
-		group.conforms = cfgSha == fileSha
+		group.conforms = cfgGroup.Hash == fileSha
 		log.Debugf("Processing %s group. Collision=%t", groupFields[0], group.conforms)
 		if group.conforms {
 			countSuccess++

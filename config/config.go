@@ -13,6 +13,10 @@ type Flags struct {
 	Debug  bool
 }
 
+type GroupMetric struct {
+	Hash string `yaml:"hash"`
+}
+
 type FileMetric struct {
 	Path string `yaml:"path"`
 	Hash string `yaml:"hash"`
@@ -21,10 +25,10 @@ type FileMetric struct {
 // Config contains all the configuration settings
 type Config struct {
 	// Groups is keyed by groupname and contains the sha256 has (in hex, formatted as a string)
-	Groups         map[string]string     `yaml:"groups"`
-	GroupFile      string                `yaml:"groupfile"`
-	Files          map[string]FileMetric `yaml:"files"`
-	ScrapeInterval int                   `yaml:"scrape_interval"`
+	Groups         map[string]GroupMetric `yaml:"groups"`
+	GroupFile      string                 `yaml:"groupfile"`
+	Files          map[string]FileMetric  `yaml:"files"`
+	ScrapeInterval int                    `yaml:"scrape_interval"`
 	Exporter       struct {
 		Address string `yaml:"address"`
 		Port    int    `yaml:"port"`

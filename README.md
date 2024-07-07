@@ -21,7 +21,8 @@ The SHA Exporter is intended to provide a means to ensure files and groups confo
 The configuration file should be created in yaml format.  All the options are shown below.  Many of these have sane defaults if they're not specified in the config file.
 ```
 groups:
-  wheel: 4cb48f0f2d2401f605cc9ba480fa238901224b017d5f89755d7fc9b0cc90f0f8
+  wheel:
+    hash: 4cb48f0f2d2401f605cc9ba480fa238901224b017d5f89755d7fc9b0cc90f0f8
 
 files:
   sshdcfg:

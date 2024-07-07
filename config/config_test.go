@@ -22,9 +22,12 @@ func TestConfig(t *testing.T) {
 	defer os.Remove(testCfgFile.Name())
 	_, err = testCfgFile.WriteString(`---
 groups:
-  foo: 2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae
-  bar: fcde2b2edba56bf408601fb721fe9b5c338d10ee429ea04fae5511b68fbf8fb9
-  baz: baa5a0964d3320fbc0c6a922140453c8513ea24ab8fd0577034804a967248096
+  foo:
+    hash: 2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae
+  bar:
+    hash: fcde2b2edba56bf408601fb721fe9b5c338d10ee429ea04fae5511b68fbf8fb9
+  baz:
+    hash: baa5a0964d3320fbc0c6a922140453c8513ea24ab8fd0577034804a967248096
 exporter:
   address: localhost
   port: 12345
@@ -45,7 +48,7 @@ logging:
 	// Eg. sha256("foo") = 2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae
 	for k, v := range cfg.Groups {
 		hash := hashMaker(k)
-		if hash != v {
+		if hash != v.Hash {
 			t.Errorf("Unexpected hash for %s.  Expected=%s, Got=%s", k, v, hash)
 		}
 	}
@@ -56,7 +59,7 @@ logging:
 
 func TestFlags(t *testing.T) {
 	f := ParseFlags()
-	expectingConfig := "groupsha.yml"
+	expectingConfig := "examples/sha_exporter.yml"
 	if f.Config != expectingConfig {
 		t.Fatalf("Unexpected config flag: Expected=%s, Got=%s", expectingConfig, f.Config)
 	}
