@@ -1,0 +1,13 @@
+[Unit]
+Description = SHA Exporter Service
+After = network.target
+
+[Service]
+Type = simple
+ExecStart = /usr/local/bin/sha_exporter --config=/etc/prometheus/sha_exporter.yml
+Restart = on-failure
+User = exporter
+Group = exporter
+
+[Install]
+WantedBy = multi-user.target
