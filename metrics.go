@@ -13,6 +13,7 @@ const (
 type prometheusMetrics struct {
 	groupSHA   *prometheus.GaugeVec
 	groupUsers *prometheus.GaugeVec
+	fileSHA    *prometheus.GaugeVec
 }
 
 func addPrefix(s string) string {
@@ -20,7 +21,7 @@ func addPrefix(s string) string {
 }
 
 func initCollectors() *prometheusMetrics {
-	defaultLabels := []string{"group", "gid"}
+	defaultGroupLabels := []string{"group", "gid"}
 	sha := new(prometheusMetrics)
 
 	sha.groupSHA = prometheus.NewGaugeVec(
@@ -28,7 +29,7 @@ func initCollectors() *prometheusMetrics {
 			Name: addPrefix("group_users_conforms"),
 			Help: "Does the SHA256 hash of the users field match the configured hash.",
 		},
-		defaultLabels,
+		defaultGroupLabels,
 	)
 	prometheus.MustRegister(sha.groupSHA)
 
@@ -37,9 +38,18 @@ func initCollectors() *prometheusMetrics {
 			Name: addPrefix("group_users_count"),
 			Help: "Number of users in the specified group.",
 		},
-		defaultLabels,
+		defaultGroupLabels,
 	)
 	prometheus.MustRegister(sha.groupUsers)
+
+	sha.fileSHA = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: addPrefix("file_conforms"),
+			Help: "Does the SHA256 of a file match the configured hash.",
+		},
+		[]string{"name"},
+	)
+	prometheus.MustRegister(sha.fileSHA)
 
 	return sha
 }

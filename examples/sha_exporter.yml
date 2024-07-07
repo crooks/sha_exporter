@@ -3,6 +3,11 @@ groups:
   # aa,bb,cc,dd,ee,ff,gg,hh,ii,jj
   wheel: 4cb48f0f2d2401f605cc9ba480fa238901224b017d5f89755d7fc9b0cc90f0f8
 
+files:
+  pussy:
+    path: examples/pussy.txt
+    hash: 3055540351c2f0e6ce1c4bf1a63315dda30a646bbcc9e6c12ab9cddbaecf59de
+
 groupfile: examples/testgroup.txt
 
 logging:

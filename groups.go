@@ -19,10 +19,10 @@ type etcGroupEntry struct {
 	conforms bool
 }
 
-func findGroups(groupFileName string) error {
+func findGroups(groupFileName string) (countSuccess, countFail int, err error) {
 	groupFile, err := os.Open(groupFileName)
 	if err != nil {
-		return err
+		return
 	}
 	defer groupFile.Close()
 	scanner := bufio.NewScanner(groupFile)
@@ -36,18 +36,22 @@ func findGroups(groupFileName string) error {
 			log.Tracef("Unwanted group \"%s\".  Continuing", groupFields[0])
 			continue
 		}
-		log.Debugf("Processing %s group", groupFields[0])
 		group := initGroup(groupFields)
 		fileSha := group.usersHash()
 		// If the SHA hash defined in the configuration matches the hash
 		// generated from the users in the group file, set conforms to true.
-		if cfgSha == fileSha {
-			group.conforms = true
+		group.conforms = cfgSha == fileSha
+		log.Debugf("Processing %s group. Collision=%t", groupFields[0], group.conforms)
+		if group.conforms {
+			countSuccess++
+		} else {
+			countFail++
 		}
+
 		prom.groupSHA.WithLabelValues(group.name, group.gid).Set(bool2Float(group.conforms))
 		prom.groupUsers.WithLabelValues(group.name, group.gid).Set(group.countUsers())
 	}
-	return nil
+	return
 }
 
 func initGroup(groupFields []string) *etcGroupEntry {

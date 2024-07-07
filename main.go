@@ -31,10 +31,17 @@ func metricsCollector() {
 	interval := time.Duration(cfg.ScrapeInterval) * time.Second
 	log.Infof("Parsing group file %s at interval %d seconds", cfg.GroupFile, cfg.ScrapeInterval)
 	for {
-		err := findGroups(cfg.GroupFile)
+		// Process the groups file
+		countGroupSuccess, countGroupFail, err := findGroups(cfg.GroupFile)
 		if err != nil {
 			log.Fatal(err)
 		}
+		countGroupTotal := countGroupSuccess + countGroupFail
+		log.Debugf("Processed %d group entries: Success=%d, Fail=%d", countGroupTotal, countGroupSuccess, countGroupFail)
+		// Process file hashes
+		countSuccess, countFail, countMissing := iterFiles()
+		countTotal := countSuccess + countFail + countMissing
+		log.Debugf("Processed %d files: Success=%d, Fail=%d, NotFound=%d", countTotal, countSuccess, countFail, countMissing)
 		time.Sleep(interval)
 	}
 }
