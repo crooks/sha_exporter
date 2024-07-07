@@ -44,6 +44,9 @@ logging:
 ```
 
 ## Generating SHA-256 hashes
-Each file or group defined in the config file requires an associated [SHA-256](https://en.wikipedia.org/wiki/SHA-2).  There are many ways to generate such a hash depending on your operating system.  On Linux, the `sha256sum` is a convenient option.
+Each file or group defined in the config file requires an associated [SHA-256](https://en.wikipedia.org/wiki/SHA-2) hash.  There are many ways to generate such a hash depending on your operating system.  On Linux, the `sha256sum` is a convenient option.
 * To generate a file hash: `sha256sum <filename>`
 * To generate the hash of a string (like the users in a group): `echo -n "user1,user2,user3" | sha256sum`
+
+**Note**: The ordering of users in a group is not important.  The code will sort them before generating a hash.  For example, `user1,user2,user3` will generate the same hash as `user2,user3,user1`.  When generating the hash for the configuration, it's important to first place them in alphanumeric order so as to generate the correct hash.  Using the previous example, you would use `echo -n "user1,user2,user3" | sha256sum`, **not** `echo -n "user2,user3,user1" | sha256sum`.
+
