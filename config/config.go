@@ -59,7 +59,7 @@ func ParseConfig(filename string) (*Config, error) {
 		config.Exporter.Address = "0.0.0.0"
 	}
 	if config.Exporter.Port == 0 {
-		config.Exporter.Port = 9239
+		config.Exporter.Port = 9773
 	}
 	if config.Logging.LevelStr == "" {
 		config.Logging.LevelStr = "info"
