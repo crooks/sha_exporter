@@ -68,6 +68,18 @@ func main() {
 	prom = initCollectors()
 	go metricsCollector()
 	http.Handle("/metrics", promhttp.Handler())
+	http.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
+		_, err := w.Write([]byte(`<html>
+		<head><title>SHA Exporter</title></head>
+		<body>
+		<h1>SHA Exporter</h1>
+		<p><a href='/metrics'>Metrics</a></p>
+		</body>
+		</html>`))
+		if err != nil {
+			log.Warnf("Error on returning home page: %s", err)
+		}
+	})
 	exporter := fmt.Sprintf("%s:%d", cfg.Exporter.Address, cfg.Exporter.Port)
 	err = http.ListenAndServe(exporter, nil)
 	if err != nil {
