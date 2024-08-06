@@ -27,11 +27,13 @@ func iterFiles() (success, fail, missing int) {
 		fileHash, err := fileHash(v.Path)
 		if err != nil {
 			log.Warnf("Hashing of %s failed with: %v", k, err)
+			prom.fileRead.WithLabelValues(k).Set(0)
 			missing++
 			continue
 		}
 		conforms := v.Hash == fileHash
 		log.Debugf("Processing file %s with path %s. Collision=%t", k, v.Path, conforms)
+		prom.fileRead.WithLabelValues(k).Set(1)
 		prom.fileSHA.WithLabelValues(k).Set(bool2Float(conforms))
 		if conforms {
 			success++

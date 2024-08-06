@@ -13,6 +13,7 @@ const (
 type prometheusMetrics struct {
 	groupSHA   *prometheus.GaugeVec
 	groupUsers *prometheus.GaugeVec
+	fileRead   *prometheus.GaugeVec
 	fileSHA    *prometheus.GaugeVec
 }
 
@@ -41,6 +42,15 @@ func initCollectors() *prometheusMetrics {
 		defaultGroupLabels,
 	)
 	prometheus.MustRegister(sha.groupUsers)
+
+	sha.fileRead = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: addPrefix("file_read"),
+			Help: "Has the exporter successfully read the file? (1=True, 0=False)",
+		},
+		[]string{"name"},
+	)
+	prometheus.MustRegister(sha.fileRead)
 
 	sha.fileSHA = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
