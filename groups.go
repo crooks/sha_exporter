@@ -37,14 +37,16 @@ func findGroups(groupFileName string) (countSuccess, countFail int, err error) {
 			continue
 		}
 		group := initGroup(groupFields)
+		// fileSha is the SHA hash of the group line in /etc/group
 		fileSha := group.usersHash()
 		// If the SHA hash defined in the configuration matches the hash
 		// generated from the users in the group file, set conforms to true.
 		group.conforms = cfgGroup.Hash == fileSha
-		log.Debugf("Processing %s group. Collision=%t", groupFields[0], group.conforms)
 		if group.conforms {
+			log.Tracef("Hash collision for %s: %s", groupFields[0], fileSha)
 			countSuccess++
 		} else {
+			log.Debugf("No hash collision for %s: Expected=%s, Got=%s", groupFields[0], cfgGroup.Hash, fileSha)
 			countFail++
 		}
 
