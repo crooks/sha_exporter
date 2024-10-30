@@ -11,6 +11,7 @@ import (
 type Flags struct {
 	Config string
 	Debug  bool
+	Hashes bool
 }
 
 type GroupMetric struct {
@@ -77,6 +78,7 @@ func ParseFlags() *Flags {
 	f := new(Flags)
 	flag.StringVar(&f.Config, "config", "examples/sha_exporter.yml", "Path to sha_exporter configuration file")
 	flag.BoolVar(&f.Debug, "debug", false, "Expand logging with Debug level messaging and format")
+	flag.BoolVar(&f.Hashes, "hashes", false, "Print hash details for each group and then exit")
 	flag.Parse()
 	return f
 }

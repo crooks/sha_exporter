@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
 	"os"
 	"slices"
 	"strings"
@@ -56,6 +57,28 @@ func findGroups(groupFileName string) (countSuccess, countFail int, err error) {
 	return
 }
 
+// debugGroups prints the sorted group members and the associated hash
+func debugGroups(groupFileName string) (err error) {
+	groupFile, err := os.Open(groupFileName)
+	if err != nil {
+		return
+	}
+	defer groupFile.Close()
+	scanner := bufio.NewScanner(groupFile)
+	for scanner.Scan() {
+		line := scanner.Text()
+		groupFields := strings.Split(line, ":")
+		// Test if config contains an entry for this group.  If it does, assign the expected hash.
+		_, ok := cfg.Groups[groupFields[0]]
+		// If there isn't a dictionary entry in cfg.Groups for this line in the file, move on.
+		if ok {
+			group := initGroup(groupFields)
+			group.debug()
+		}
+	}
+	return
+}
+
 func initGroup(groupFields []string) *etcGroupEntry {
 	return &etcGroupEntry{
 		name:     groupFields[0],
@@ -63,6 +86,12 @@ func initGroup(groupFields []string) *etcGroupEntry {
 		gid:      groupFields[2],
 		users:    groupFields[3],
 	}
+}
+
+// debug prints the sorted users string and the associated hash
+func (group *etcGroupEntry) debug() {
+	fmt.Printf("%s: %s", group.name, group.sortUsers())
+	fmt.Printf("%s: %s", group.name, group.usersHash())
 }
 
 // Take a users string E.g. "user3,user1,user2" and return "user1,user2,user3"

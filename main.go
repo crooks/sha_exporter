@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gitlab/sha_exporter/config"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/Masterminds/log-go"
@@ -63,6 +64,14 @@ func main() {
 		log.Current = jlog.NewJournal(loglev)
 	} else {
 		log.Current = log.StdLogger{Level: loglev}
+	}
+	// flags.Hashes being set will print the group hashes and exit.
+	if flags.Hashes {
+		err := debugGroups(cfg.GroupFile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		os.Exit(0)
 	}
 
 	prom = initCollectors()
