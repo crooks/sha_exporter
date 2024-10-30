@@ -90,8 +90,9 @@ func initGroup(groupFields []string) *etcGroupEntry {
 
 // debug prints the sorted users string and the associated hash
 func (group *etcGroupEntry) debug() {
-	fmt.Printf("%s: %s", group.name, group.sortUsers())
-	fmt.Printf("%s: %s", group.name, group.usersHash())
+    fmt.Printf("%s:-\n", group.name)
+	fmt.Printf("  %s\n", group.sortUsers())
+	fmt.Printf("  %s\n", group.usersHash())
 }
 
 // Take a users string E.g. "user3,user1,user2" and return "user1,user2,user3"
