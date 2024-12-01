@@ -7,21 +7,6 @@ import (
 	"testing"
 )
 
-func makeTestFile(testFileName string) os.File {
-	testFile, err := os.CreateTemp("", testFileName)
-	if err != nil {
-		log.Fatalf("Unable to create test file: %v", err)
-	}
-	_, err = testFile.WriteString(`group1:x:4:user2,user3,user1
-	group2:x:5:
-	group3:x:6:user1`)
-	if err != nil {
-		os.Remove(testFile.Name())
-		log.Fatalf("Unable to write to test file: %v", err)
-	}
-	return *testFile
-}
-
 func TestInitGroup(t *testing.T) {
 	testSlice := strings.Split("group1:x:4:user2,user3,user1", ":")
 	group := initGroup(testSlice)
