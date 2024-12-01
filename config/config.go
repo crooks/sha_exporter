@@ -9,11 +9,9 @@ import (
 
 // Flags are the command line Flags
 type Flags struct {
-	Config  string
-	Debug   bool
-	Hashes  bool
-	Metrics string
-	Server  bool
+	Config string
+	Debug  bool
+	Hashes bool
 }
 
 type GroupMetric struct {
@@ -27,12 +25,19 @@ type FileMetric struct {
 
 // Config contains all the configuration settings
 type Config struct {
-	// Groups is keyed by groupname and contains the sha256 has (in hex, formatted as a string)
-	Groups         map[string]GroupMetric `yaml:"groups"`
-	GroupFile      string                 `yaml:"groupfile"`
-	Files          map[string]FileMetric  `yaml:"files"`
-	ScrapeInterval int                    `yaml:"scrape_interval"`
-	Exporter       struct {
+	GroupFile      string `yaml:"groupfile"`
+	ScrapeInterval int    `yaml:"scrape_interval"`
+	ServerMode     bool   `yaml:"server_mode"`
+	Metrics        struct {
+		// Groups is keyed by groupname and contains the sha256 hash (in hex, formatted as a string)
+		Groups map[string]GroupMetric `yaml:"groups"`
+		Files  map[string]FileMetric  `yaml:"files"`
+	}
+	Exporter struct {
+		Address string `yaml:"address"`
+		Port    int    `yaml:"port"`
+	}
+	Server struct {
 		Address string `yaml:"address"`
 		Port    int    `yaml:"port"`
 	}
@@ -81,8 +86,6 @@ func ParseFlags() *Flags {
 	flag.StringVar(&f.Config, "config", "examples/sha_exporter.yml", "Path to sha_exporter configuration file")
 	flag.BoolVar(&f.Debug, "debug", false, "Expand logging with Debug level messaging and format")
 	flag.BoolVar(&f.Hashes, "hashes", false, "Print hash details for each group and then exit")
-	flag.StringVar(&f.Metrics, "metrics", "/etc/sha_exporter/metrics.yml", "Path to the metrics file when running as a server")
-	flag.BoolVar(&f.Server, "server", false, "Function as a hashes server instead of an Exporter")
 	flag.Parse()
 	return f
 }

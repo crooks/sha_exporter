@@ -46,7 +46,7 @@ logging:
 	}
 	// As a quick test, we compare the hash of the array keys.
 	// Eg. sha256("foo") = 2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae
-	for k, v := range cfg.Groups {
+	for k, v := range cfg.Metrics.Groups {
 		hash := hashMaker(k)
 		if hash != v.Hash {
 			t.Errorf("Unexpected hash for %s.  Expected=%s, Got=%s", k, v, hash)

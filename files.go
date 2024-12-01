@@ -23,7 +23,7 @@ func fileHash(fileName string) (string, error) {
 }
 
 func iterFiles() (success, fail, missing int) {
-	for k, v := range cfg.Files {
+	for k, v := range cfg.Metrics.Files {
 		fileHash, err := fileHash(v.Path)
 		if err != nil {
 			log.Warnf("Hashing of %s failed with: %v", k, err)

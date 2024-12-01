@@ -31,7 +31,7 @@ func findGroups(groupFileName string) (countSuccess, countFail int, err error) {
 		line := scanner.Text()
 		groupFields := strings.Split(line, ":")
 		// Test if config contains an entry for this group.  If it does, assign the expected hash.
-		cfgGroup, ok := cfg.Groups[groupFields[0]]
+		cfgGroup, ok := cfg.Metrics.Groups[groupFields[0]]
 		// If there isn't a dictionary entry in cfg.Groups for this line in the file, move on.
 		if !ok {
 			log.Tracef("Unwanted group \"%s\".  Continuing", groupFields[0])
@@ -69,7 +69,7 @@ func debugGroups(groupFileName string) (err error) {
 		line := scanner.Text()
 		groupFields := strings.Split(line, ":")
 		// Test if config contains an entry for this group.  If it does, assign the expected hash.
-		_, ok := cfg.Groups[groupFields[0]]
+		_, ok := cfg.Metrics.Groups[groupFields[0]]
 		// If there isn't a dictionary entry in cfg.Groups for this line in the file, move on.
 		if ok {
 			group := initGroup(groupFields)
@@ -90,7 +90,7 @@ func initGroup(groupFields []string) *etcGroupEntry {
 
 // debug prints the sorted users string and the associated hash
 func (group *etcGroupEntry) debug() {
-    fmt.Printf("%s:-\n", group.name)
+	fmt.Printf("%s:-\n", group.name)
 	fmt.Printf("  %s\n", group.sortUsers())
 	fmt.Printf("  %s\n", group.usersHash())
 }
