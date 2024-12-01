@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/sha_exporter/config"
+	"github.com/sha_exporter/server"
 
 	"github.com/Masterminds/log-go"
 	"github.com/crooks/jlog"
@@ -71,12 +72,12 @@ func client() {
 	}
 }
 
-func server() {
-	met, err := server.NewMetrics("config.yaml")
+func apiServer() {
+	serv, err := server.NewMetrics(flags.Metrics)
 	if err != nil {
 		panic(err)
 	}
-	http.HandleFunc("/", met.servApi)
+	http.HandleFunc("/", serv.ServApi)
 	http.ListenAndServe(":8080", nil)
 }
 
@@ -107,7 +108,7 @@ func main() {
 		os.Exit(0)
 	}
 	if flags.Server {
-		server()
+		apiServer()
 	} else {
 		client()
 	}

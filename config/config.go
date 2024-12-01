@@ -9,10 +9,11 @@ import (
 
 // Flags are the command line Flags
 type Flags struct {
-	Config string
-	Debug  bool
-	Hashes bool
-	Server bool
+	Config  string
+	Debug   bool
+	Hashes  bool
+	Metrics string
+	Server  bool
 }
 
 type GroupMetric struct {
@@ -80,6 +81,7 @@ func ParseFlags() *Flags {
 	flag.StringVar(&f.Config, "config", "examples/sha_exporter.yml", "Path to sha_exporter configuration file")
 	flag.BoolVar(&f.Debug, "debug", false, "Expand logging with Debug level messaging and format")
 	flag.BoolVar(&f.Hashes, "hashes", false, "Print hash details for each group and then exit")
+	flag.StringVar(&f.Metrics, "metrics", "/etc/sha_exporter/metrics.yml", "Path to the metrics file when running as a server")
 	flag.BoolVar(&f.Server, "server", false, "Function as a hashes server instead of an Exporter")
 	flag.Parse()
 	return f

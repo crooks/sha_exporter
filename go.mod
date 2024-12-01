@@ -1,4 +1,4 @@
-module gitlab/sha_exporter
+module github.com/sha_exporter
 
 go 1.22.2
 

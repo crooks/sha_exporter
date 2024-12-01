@@ -56,7 +56,7 @@ func (met *Metrics) WriteMetricsJson(filename string) (err error) {
 	return
 }
 
-func (met *Metrics) servApi(w http.ResponseWriter, req *http.Request) {
+func (met *Metrics) ServApi(w http.ResponseWriter, req *http.Request) {
 	data, err := json.Marshal(met)
 	if err != nil {
 		panic(err)
@@ -79,13 +79,4 @@ func NewMetrics(filename string) (*Metrics, error) {
 		return nil, err
 	}
 	return config, nil
-}
-
-func main() {
-	met, err := NewMetrics("config.yaml")
-	if err != nil {
-		panic(err)
-	}
-	http.HandleFunc("/", met.servApi)
-	http.ListenAndServe(":8080", nil)
 }
